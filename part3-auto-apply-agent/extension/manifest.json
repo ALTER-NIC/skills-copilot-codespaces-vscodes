@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Jobnova Auto-Apply Agent",
+  "version": "1.0.0",
+  "description": "Server-side agent that fills ATS job applications from a structured profile.",
+  "minimum_chrome_version": "110",
+  "permissions": ["tabs", "scripting", "storage", "alarms"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "./profile.schema.json",
+  "identity": {
+    "fullName": "Nicolas Webb Lopez",
+    "firstName": "Nicolas",
+    "lastName": "Webb Lopez",
+    "email": "nicolas@example.com",
+    "phone": "+33 6 12 34 56 78",
+    "location": "Paris, France",
+    "currentCompany": "Independent",
+    "currentTitle": "AI Engineer"
+  },
+  "links": {
+    "linkedin": "https://www.linkedin.com/in/example",
+    "github": "https://github.com/example",
+    "portfolio": "https://example.com",
+    "twitter": "",
+    "other": ""
+  },
+  "resume": {
+    "path": "profiles/resume.pdf",
+    "filename": "Nicolas_Webb_Lopez_Resume.pdf"
+  },
+  "coverLetter": "I am excited to apply for this role...",
+  "workAuthorization": {
+    "authorizedToWork": true,
+    "requiresSponsorship": false,
+    "countryOfResidence": "France"
+  },
+  "eeo": {
+    "gender": "Decline To Self Identify",
+    "race": "Decline To Self Identify",
+    "veteranStatus": "Decline To Self Identify",
+    "disabilityStatus": "Decline To Self Identify"
+  },
+  "answers": {
+    "years_of_experience": "5",
+    "notice_period": "1 month",
+    "salary_expectation": "Open to discussion",
+    "why_this_company": "Your work on applied AI for real user problems is exactly where I want to contribute.",
+    "referral": "LinkedIn"
+  }
+}

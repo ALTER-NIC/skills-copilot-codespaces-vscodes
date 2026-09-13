@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Applicant profile",
+  "description": "The data the agent uses to fill an application. Nothing here is transmitted anywhere except the ATS form the user is applying to.",
+  "type": "object",
+  "required": ["identity"],
+  "properties": {
+    "identity": {
+      "type": "object",
+      "required": ["fullName", "email"],
+      "properties": {
+        "fullName": { "type": "string" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "location": { "type": "string" },
+        "currentCompany": { "type": "string" },
+        "currentTitle": { "type": "string" }
+      }
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "linkedin": { "type": "string" }, "github": { "type": "string" },
+        "portfolio": { "type": "string" }, "twitter": { "type": "string" },
+        "other": { "type": "string" }
+      }
+    },
+    "resume": {
+      "type": "object",
+      "properties": { "path": { "type": "string" }, "filename": { "type": "string" } }
+    },
+    "coverLetter": { "type": "string" },
+    "workAuthorization": {
+      "type": "object",
+      "properties": {
+        "authorizedToWork": { "type": "boolean" },
+        "requiresSponsorship": { "type": "boolean" },
+        "countryOfResidence": { "type": "string" }
+      }
+    },
+    "eeo": { "type": "object", "additionalProperties": { "type": "string" } },
+    "answers": {
+      "type": "object",
+      "description": "Free-form answers keyed by a normalised question slug.",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}
