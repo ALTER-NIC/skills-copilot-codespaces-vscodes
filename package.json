@@ -1,0 +1,16 @@
+{
+  "name": "jobnova-takehome",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Jobnova AI Engineer take-home: LinkedIn job-source agent + server-side auto-apply agent",
+  "workspaces": ["part2-job-source-agent", "part3-auto-apply-agent"],
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "npm run build -w part2-job-source-agent",
+    "test": "npm run test -w part2-job-source-agent && npm run test -w part3-auto-apply-agent",
+    "resolve": "npm run resolve -w part2-job-source-agent --",
+    "bench": "npm run bench -w part2-job-source-agent --",
+    "serve": "npm run serve -w part2-job-source-agent",
+    "apply": "npm run apply -w part3-auto-apply-agent --"
+  }
+}

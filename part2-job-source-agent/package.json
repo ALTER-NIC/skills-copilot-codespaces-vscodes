@@ -1,0 +1,29 @@
+{
+  "name": "part2-job-source-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "LinkedIn job posting -> company website -> canonical job listing page",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "resolve": "tsx bin/cli.ts",
+    "bench": "tsx bench/run.ts",
+    "serve": "tsx server/index.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "express": "^4.21.2",
+    "undici": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "optionalDependencies": {
+    "playwright": "^1.49.1"
+  }
+}

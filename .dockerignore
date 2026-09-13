@@ -1,0 +1,8 @@
+node_modules
+**/node_modules
+**/dist
+**/.cache
+**/bench/out
+**/run-artifacts
+**/.chrome-profile
+.git

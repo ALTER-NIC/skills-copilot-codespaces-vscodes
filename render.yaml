@@ -1,0 +1,20 @@
+# One-click deploy on Render (https://render.com). Fly.io / Railway / any Docker
+# host works the same way -- the image is a plain Node server on $PORT.
+services:
+  - type: web
+    name: jobnova-job-source-agent
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: USE_BROWSER
+        value: "1"
+      - key: MAX_BATCH
+        value: "10"
+      # Optional: set in the dashboard to make LinkedIn extraction reliable from
+      # a datacenter IP. The agent runs without them, just with a lower hit rate.
+      - key: SCRAPINGDOG_API_KEY
+        sync: false
+      - key: PROXYCURL_API_KEY
+        sync: false

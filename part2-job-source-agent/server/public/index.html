@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job Source Agent — LinkedIn → company jobs page</title>
+<style>
+  :root {
+    --bg: #fbfbfa; --panel: #ffffff; --border: #e4e4e1; --text: #1a1a18;
+    --muted: #6b6b66; --accent: #2f6f4e; --accent-soft: #e8f2ec;
+    --warn: #8a6d1f; --warn-soft: #fdf4de; --err: #a13d32; --err-soft: #fbeae7;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16161a; --panel: #1e1e23; --border: #32323a; --text: #ececf0;
+      --muted: #9a9aa5; --accent: #6ec39a; --accent-soft: #1d3229;
+      --warn: #e3bf6a; --warn-soft: #332d19; --err: #e8877a; --err-soft: #331f1c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); padding-block: 40px;
+    padding-inline: 20px;
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin: 0 0 28px; }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px; margin-bottom: 20px;
+  }
+  label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 13px; }
+  textarea {
+    width: 100%; min-height: 130px; resize: vertical; padding: 12px;
+    border: 1px solid var(--border); border-radius: 8px; background: var(--bg);
+    color: var(--text); font-family: var(--mono); font-size: 13px; line-height: 1.6;
+  }
+  textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .row { display: flex; gap: 12px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+  button {
+    background: var(--accent); color: #fff; border: 0; border-radius: 8px;
+    padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  button.ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+  .hint { color: var(--muted); font-size: 13px; }
+  .summary {
+    display: none; align-items: baseline; gap: 10px; padding: 14px 18px;
+    border-radius: 10px; background: var(--accent-soft); margin-bottom: 16px;
+  }
+  .summary.show { display: flex; }
+  .summary b { font-size: 22px; }
+  .card {
+    border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+    margin-bottom: 10px; background: var(--panel);
+  }
+  .card-head { display: flex; gap: 10px; align-items: flex-start; }
+  .pill {
+    flex: none; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+  .pill.ok { background: var(--accent-soft); color: var(--accent); }
+  .pill.low { background: var(--warn-soft); color: var(--warn); }
+  .pill.no { background: var(--err-soft); color: var(--err); }
+  .pill.run { background: var(--border); color: var(--muted); }
+  .card-body { min-width: 0; flex: 1; }
+  .in { font-family: var(--mono); font-size: 12px; color: var(--muted);
+        overflow-wrap: anywhere; }
+  .out { margin-top: 6px; font-size: 15px; overflow-wrap: anywhere; }
+  .out a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .out a:hover { text-decoration: underline; }
+  .meta { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag {
+    font-size: 11px; padding: 2px 8px; border-radius: 5px;
+    background: var(--bg); border: 1px solid var(--border); color: var(--muted);
+    font-family: var(--mono);
+  }
+  details { margin-top: 10px; }
+  summary { cursor: pointer; font-size: 12px; color: var(--muted); user-select: none; }
+  .trace { margin-top: 10px; font-family: var(--mono); font-size: 11.5px;
+           border-left: 2px solid var(--border); padding-left: 12px; }
+  .trace-step { margin-bottom: 8px; }
+  .trace-stage { color: var(--accent); font-weight: 600; }
+  .trace-detail, .trace-url { color: var(--muted); overflow-wrap: anywhere; }
+  .err { color: var(--err); font-size: 13px; margin-top: 6px; }
+  footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
+  code { font-family: var(--mono); background: var(--bg); padding: 1px 5px;
+         border-radius: 4px; border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Job Source Agent</h1>
+  <p class="sub">
+    Paste LinkedIn job posting URLs. The agent identifies the hiring company,
+    finds its website, then resolves that company's own job listing page —
+    verifying the result against the ATS vendor's public API wherever possible.
+  </p>
+
+  <div class="panel">
+    <label for="urls">LinkedIn job posting URLs (one per line, max 10)</label>
+    <textarea id="urls" spellcheck="false"
+placeholder="https://www.linkedin.com/jobs/view/4427787182/"></textarea>
+    <div class="row">
+      <button id="go">Resolve</button>
+      <button id="sample" class="ghost">Load example</button>
+      <span class="hint" id="hint">A direct ATS or company URL works too.</span>
+    </div>
+  </div>
+
+  <div class="summary" id="summary"></div>
+  <div id="results"></div>
+
+  <footer>
+    API: <code>POST /api/resolve {"url": "..."}</code> ·
+    <code>POST /api/resolve-batch {"urls": [...]}</code>
+  </footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const MAX = 10;
+
+$('sample').addEventListener('click', () => {
+  $('urls').value = 'https://www.linkedin.com/jobs/view/4427787182/';
+});
+
+$('go').addEventListener('click', run);
+
+async function run() {
+  const urls = $('urls').value.split('\n').map(s => s.trim()).filter(Boolean).slice(0, MAX);
+  if (!urls.length) return;
+
+  $('go').disabled = true;
+  $('results').innerHTML = '';
+  $('summary').className = 'summary';
+
+  // Render a placeholder per URL, then fill each in as its request lands.
+  const cards = urls.map((u, i) => {
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.innerHTML = `<div class="card-head">
+      <span class="pill run">…</span>
+      <div class="card-body"><div class="in"></div>
+      <div class="out" style="color:var(--muted)">resolving…</div></div></div>`;
+    el.querySelector('.in').textContent = u;
+    $('results').appendChild(el);
+    return el;
+  });
+
+  let done = 0, ok = 0;
+  await Promise.all(urls.map(async (url, i) => {
+    try {
+      const res = await fetch('/api/resolve', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'request failed');
+      if (data.jobsListUrl && data.confidence >= 0.7) ok++;
+      cards[i].replaceWith(renderCard(url, data));
+    } catch (e) {
+      cards[i].replaceWith(renderCard(url, { errors: [String(e.message || e)], trace: [],
+        confidence: 0, jobsListUrl: null, company: {}, kind: 'not-found' }));
+    } finally {
+      done++;
+      showSummary(ok, done, urls.length);
+    }
+  }));
+
+  $('go').disabled = false;
+}
+
+function showSummary(ok, done, total) {
+  const s = $('summary');
+  s.className = 'summary show';
+  const pct = done ? ((ok / done) * 100).toFixed(0) : '0';
+  s.innerHTML = `<b>${ok}/${done}</b><span>resolved${done < total
+    ? ` (${total - done} in flight)` : ''} — <b>${pct}%</b> success rate</span>`;
+}
+
+function renderCard(input, r) {
+  const el = document.createElement('div');
+  el.className = 'card';
+  const good = r.jobsListUrl && r.confidence >= 0.7;
+  const pill = good ? ['ok', 'found'] : r.jobsListUrl ? ['low', 'low conf'] : ['no', 'not found'];
+
+  const head = document.createElement('div');
+  head.className = 'card-head';
+  head.innerHTML = `<span class="pill ${pill[0]}">${pill[1]}</span><div class="card-body"></div>`;
+  const body = head.querySelector('.card-body');
+
+  const inDiv = document.createElement('div');
+  inDiv.className = 'in';
+  inDiv.textContent = (r.company && r.company.name ? r.company.name + '  ·  ' : '') + input;
+  body.appendChild(inDiv);
+
+  const out = document.createElement('div');
+  out.className = 'out';
+  if (r.jobsListUrl) {
+    const a = document.createElement('a');
+    a.href = r.jobsListUrl; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.textContent = r.jobsListUrl;
+    out.appendChild(a);
+  } else {
+    out.style.color = 'var(--muted)';
+    out.textContent = 'No job listing page found';
+  }
+  body.appendChild(out);
+
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  const tags = [];
+  if (r.ats) tags.push(`ats: ${r.ats}/${r.atsSlug}`);
+  else if (r.kind) tags.push(r.kind);
+  if (r.jobCount !== null && r.jobCount !== undefined) tags.push(`${r.jobCount} open roles`);
+  if (typeof r.confidence === 'number') tags.push(`confidence ${r.confidence.toFixed(2)}`);
+  if (r.totalMs) tags.push(`${(r.totalMs / 1000).toFixed(1)}s`);
+  for (const t of tags) {
+    const s = document.createElement('span');
+    s.className = 'tag'; s.textContent = t; meta.appendChild(s);
+  }
+  body.appendChild(meta);
+
+  for (const e of (r.errors || [])) {
+    const d = document.createElement('div');
+    d.className = 'err'; d.textContent = e; body.appendChild(d);
+  }
+
+  if ((r.trace || []).length) {
+    const det = document.createElement('details');
+    const sum = document.createElement('summary');
+    sum.textContent = `How it got there (${r.trace.length} steps)`;
+    det.appendChild(sum);
+    const tr = document.createElement('div');
+    tr.className = 'trace';
+    for (const st of r.trace) {
+      const d = document.createElement('div');
+      d.className = 'trace-step';
+      const stage = document.createElement('div');
+      stage.innerHTML = `<span class="trace-stage"></span> <span></span>`;
+      stage.querySelector('.trace-stage').textContent = st.stage;
+      stage.querySelectorAll('span')[1].textContent =
+        st.outcome + (st.ms ? ` (${st.ms}ms)` : '');
+      d.appendChild(stage);
+      if (st.detail) d.appendChild(mk('trace-detail', st.detail));
+      if (st.url) d.appendChild(mk('trace-url', st.url));
+      for (const c of (st.candidates || []).slice(0, 4)) {
+        d.appendChild(mk('trace-url', `  ${c.score}  ${c.url}  [${c.reasons.join(' ')}]`));
+      }
+      tr.appendChild(d);
+    }
+    det.appendChild(tr);
+    body.appendChild(det);
+  }
+
+  el.appendChild(head);
+  return el;
+}
+
+function mk(cls, text) {
+  const d = document.createElement('div');
+  d.className = cls; d.textContent = text;
+  return d;
+}
+</script>
+</body>
+</html>
