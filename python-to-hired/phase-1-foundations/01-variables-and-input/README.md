@@ -78,6 +78,25 @@ Read the **last line first**. Here, `int()` got text that isn't a number. The li
 
 ---
 
+## 🛡️ Security concept: the CIA Triad
+*Security+ Domain 1: General Security Concepts*
+
+Every security decision protects at least one of three things:
+
+| Letter | Means | Example of it breaking |
+|---|---|---|
+| **C**onfidentiality | Only the right people can see data | Payroll file leaked |
+| **I**ntegrity | Data isn't changed without permission | Attacker edits a bank transfer amount |
+| **A**vailability | Systems work when people need them | Ransomware, DDoS, a printer outage |
+
+Your project's **impact score** measures an **availability** problem: how many people are blocked,
+and for how long. Real incident response teams rank incidents with this kind of math.
+
+**Quiz yourself:** a hacker changes a student's grade in a database. Which letter of CIA is that?
+*(Answer: Integrity.)*
+
+---
+
 ## Practice (do this first)
 Open [`practice.py`](practice.py), follow the TODOs, and run it after each one:
 ```bash

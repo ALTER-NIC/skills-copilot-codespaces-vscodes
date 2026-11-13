@@ -79,6 +79,25 @@ print("root" in log)       # True
 
 ---
 
+## 🛡️ Security concept: Identity & account management
+*Security+ Domains 1 & 4: General Security Concepts, Security Operations*
+
+- **Identification** = claiming who you are (your username). **Authentication** = proving it
+  (password, MFA). **Authorization** = what you're allowed to do (next lesson).
+- **Account lifecycle**: *provisioning* (creating accounts, which your project automates) →
+  *changes* when someone switches roles → *deprovisioning* (disabling on the person's last day).
+  Accounts left active after someone leaves are a **top real-world breach cause**.
+- **Username enumeration:** predictable usernames (`firstinitial + lastname`) help attackers
+  guess valid logins from LinkedIn names. That's why the **password and MFA** have to be strong:
+  in most companies, usernames are not secret.
+- **Input sanitization:** you `.strip()` and clean HR's messy input. Cleaning untrusted input is
+  also how you stop attacks like SQL injection, which you'll see in Phase 3.
+
+**Quiz yourself:** an employee quits but their account still works 3 months later. Which lifecycle
+step failed? *(Answer: Deprovisioning.)*
+
+---
+
 ## Practice (do this first)
 ```bash
 cd python-to-hired/phase-1-foundations/02-strings

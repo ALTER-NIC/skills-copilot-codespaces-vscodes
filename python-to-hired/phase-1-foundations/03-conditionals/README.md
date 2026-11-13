@@ -80,6 +80,25 @@ This is called **default deny**, and it's a core security principle. Your projec
 
 ---
 
+## 🛡️ Security concept: AAA, MFA, Least Privilege & Zero Trust
+*Security+ Domains 1 & 3: General Security Concepts, Security Architecture*
+
+- **AAA** = **A**uthentication (prove who you are) → **A**uthorization (what you may do) →
+  **A**ccounting (logging what you did). Your project does the middle one, and the stretch goal
+  adds the third.
+- **MFA factors**: something you **know** (password), something you **have** (phone, YubiKey),
+  something you **are** (fingerprint). Two passwords is *not* MFA. They're the same factor.
+- **Least privilege**: give people the *minimum* access their job needs. Interns don't get payroll.
+- **Default deny**: if no rule allows it, it's blocked. Firewalls work this way.
+- **Zero Trust**: "never trust, always verify". Check identity, device and context (like time of
+  day) on *every* request, even from inside the office network. Your business-hours rule is a
+  small zero-trust policy.
+
+**Quiz yourself:** a user logs in with a password and then answers a security question. Is that
+MFA? *(Answer: No. Both are "something you know".)*
+
+---
+
 ## Practice (do this first)
 ```bash
 cd python-to-hired/phase-1-foundations/03-conditionals

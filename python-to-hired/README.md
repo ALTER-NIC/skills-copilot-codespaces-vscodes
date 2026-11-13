@@ -10,7 +10,10 @@ a rewritten resume, and practice for interviews.
 
 ## The honest picture (read this once)
 
-- **Timeline:** about **5 months at ~2 hrs/day, 6 days/week** to be ready to apply. Going faster
+- **What you'll learn:** Python from zero, security (by building tools *and* through a Security
+  concept section in every lesson mapped to Security+), IT (Linux, Windows/AD, networking, cloud),
+  SIEM, and building with AI.
+- **Timeline:** about **6 months at ~2 hrs/day, 6 days/week** to be ready to apply. Going faster
   means putting in more hours. Skipping the projects doesn't speed anything up.
 - **The market in 2026:** entry-level tech is competitive. Some Tier-1 SOC work is now automated
   by AI tooling, and employers more often give **practical tests** before offering a job. What gets
@@ -38,6 +41,10 @@ a rewritten resume, and practice for interviews.
 ## The roadmap
 
 > ✅ = built and ready to use. 🔜 = we build it together when you get there.
+>
+> 🛡️ **Every lesson includes a "Security concept" section** tied to a CompTIA Security+ exam domain.
+> By the time you book the exam, you'll have already built something for most of its topics.
+> (Domains below follow exam SY0-701. Check [CompTIA's site](https://www.comptia.org/certifications/security) for the current version before you book.)
 
 ### Phase 0 — Setup (2–3 days) ✅
 [00-setup](00-setup/README.md): Codespaces/VS Code, the terminal, running Python, running tests, Git basics.
@@ -67,7 +74,7 @@ Every project is a small task you'd do on the job.
 | 14 🔜 | Code quality: type hints, `ruff`, docstrings, good READMEs | Clean up & publish your Phase 1 capstone |
 | 15 🔜 | Problem solving: algorithms & Big-O basics | 20 interview-style problems |
 
-### Phase 3 — The Tech Stack Around Python (Weeks 9–11)
+### Phase 3 — The Tech Stack: Linux, Windows, Networks, SIEM, Cloud (Weeks 9–13)
 | # | Lesson | Project |
 |---|---|---|
 | 16 🔜 | Linux & Bash survival (+ OverTheWire Bandit 0–15) | Bash + Python automation script |
@@ -75,8 +82,20 @@ Every project is a small task you'd do on the job.
 | 18 🔜 | SQL & SQLite | **Security Events Database** + queries a SOC analyst would run |
 | 19 🔜 | Web APIs with FastAPI | **Ticket API** (CRUD + database) |
 | 20 🔜 | Git like a pro + GitHub Actions CI + Docker basics | CI pipeline running your tests on every push |
+| 21 🔜 | **Windows, Active Directory & PowerShell** for IT | **AD User Audit**: find stale/disabled/over-privileged accounts from an AD export; PowerShell one-liners vs Python |
+| 22 🔜 | **SIEM & detection engineering**: Splunk (free) / Elastic, SPL & KQL basics, writing detection rules, Sigma | **Detection Lab**: load sample logs, write 5 detections (brute force, impossible travel, new admin, etc.) |
+| 23 🔜 | **Cloud basics**: AWS/Azure, IAM, storage, logging, common misconfigurations | **Cloud Misconfig Checker**: scan an exported cloud config (JSON) for public buckets, admin-everywhere IAM, no MFA |
 
-### Phase 4 — Portfolio Projects for GitHub (Weeks 12–18)
+### Phase 4 — AI for Security & Automation (Weeks 14–16)
+You already know AI. This phase teaches you to **build** with it, which most entry-level candidates can't do.
+| # | Lesson | Project |
+|---|---|---|
+| 24 🔜 | Calling LLM APIs from Python: prompts, structured JSON output, costs, API key safety | **AI Ticket Classifier**: auto-sort help desk tickets by category & priority |
+| 25 🔜 | Tool use & agents: letting a model call your Python functions | **SOC Assistant Agent**: asks your log analyzer & IP lookup tools to investigate an alert |
+| 26 🔜 | AI security: prompt injection, data leakage, OWASP Top 10 for LLM apps | **Break & fix**: attack your own agent with prompt injection, then defend it |
+| 27 🔜 | Using AI as a working engineer: code review, debugging, docs, knowing when it's wrong | Refactor an earlier project *with* AI and write up what it got right and wrong |
+
+### Phase 5 — Portfolio Projects for GitHub (Weeks 17–22)
 These go on your resume. Each one is a **real repo** with a README, screenshots, tests, CI badge,
 and a license.
 
@@ -91,7 +110,7 @@ and a license.
 install → usage → tests), ≥80% test coverage on core logic, GitHub Actions CI passing, type hints,
 `ruff` clean, sensible commit history, MIT license, ethical-use note for security tools.
 
-### Phase 5 — Get Hired (starts Week 14, overlaps Phase 4)
+### Phase 6 — Get Hired (starts Week 18, overlaps Phase 5)
 1. **GitHub profile:** profile README, pinned repos, consistent commits.
 2. **Resume rewrite:** send me your current resume (paste it or upload a file). I'll rewrite it around
    your projects with quantified bullets and can export a clean `.docx`.

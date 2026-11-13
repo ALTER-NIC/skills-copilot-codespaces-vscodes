@@ -34,14 +34,23 @@ Seeing the list fill up keeps you going.
 - [ ] 18 SQL + Security Events DB
 - [ ] 19 FastAPI Ticket API
 - [ ] 20 Git/CI/Docker
+- [ ] 21 Windows/AD/PowerShell + AD User Audit
+- [ ] 22 SIEM + Detection Lab
+- [ ] 23 Cloud basics + Misconfig Checker
 
-## Phase 4 — Portfolio (separate GitHub repos)
+## Phase 4 — AI for Security
+- [ ] 24 AI Ticket Classifier
+- [ ] 25 SOC Assistant Agent
+- [ ] 26 Prompt injection break & fix
+- [ ] 27 AI-assisted refactor write-up
+
+## Phase 5 — Portfolio (separate GitHub repos)
 - [ ] LogSentry — repo link:
 - [ ] IOC Enricher API — repo link:
 - [ ] SysPulse — repo link:
 - [ ] Phishing Triage Assistant — repo link:
 
-## Phase 5 — Get Hired
+## Phase 6 — Get Hired
 - [ ] GitHub profile README + pinned repos
 - [ ] Resume rewritten
 - [ ] LinkedIn updated
